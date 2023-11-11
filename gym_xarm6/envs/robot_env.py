@@ -11,6 +11,7 @@ import gym
 from gym import error, spaces
 from gym.utils import seeding
 
+
 try:
     import mujoco_py
 except ImportError as e:

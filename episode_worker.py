@@ -8,7 +8,7 @@ class EpisodeWorker:
         self.o_norm = o_norm
         self.g_norm = g_norm
     
-    def get_action(self, pre_action):
+    def _get_action(self, pre_action):
         action = pre_action.cpu().numpy().squeeze()
 
         # Add gaussian noise
@@ -26,7 +26,7 @@ class EpisodeWorker:
 
         return action
 
-    def pre_process_input(self, observation, goal):
+    def _pre_process_input(self, observation, goal):
         observation_normalized = self.o_norm.normalize(observation)
         goal_normalized = self.g_norm.normalize(goal)
 
@@ -35,7 +35,7 @@ class EpisodeWorker:
 
         return input
     
-    def generate_rollout(self, actor):
+    def generate_rollout(self, actor, test=False):
         # Get starting state
         observation = self.env.reset()
         obs = observation['observation']
@@ -47,10 +47,13 @@ class EpisodeWorker:
 
         for t in range(self.args['max_timesteps']):
             with torch.no_grad():
-                input = self.pre_process_input(obs, goal)
+                input = self._pre_process_input(obs, goal)
                 action = actor(input.cuda())
-                action = self.get_action(action)
-            
+                if not test:
+                    action = self._get_action(action)
+                else:
+                    action = action.detach().cpu().numpy().squeeze()
+                    
             # Execute action
             observation_new, reward, done, info = self.env.step(action)
 
@@ -58,15 +61,15 @@ class EpisodeWorker:
             obs_new = observation_new['observation']
             ag_new = observation_new['achieved_goal']
 
-            # if (done):
-            #     break
-
             # Append to rollout arrays
             r_obs.append(obs.copy())
             r_acts.append(action.copy())
             r_achieved_goals.append(ag.copy())
             r_goals.append(goal.copy())
             r_successes.append(info['is_success'].copy())
+
+            if (done):
+                break
 
             # Update environment status
             obs = obs_new

@@ -10,21 +10,13 @@ class ActorNetwork(nn.Module):
                  chkpt_dir='tmp/ddpg', max_action=1):
         super(ActorNetwork, self).__init__()
 
-        self.state_dims = state_dims
         self.max_action = max_action
-
-        self.fc1_dims = fc1_dims
-        self.fc2_dims = fc2_dims
-        self.fc3_dims = fc3_dims
-
-        self.n_actions = n_actions
-
         self.checkpoint_file = os.path.join(chkpt_dir, name+'_ddpg')
 
-        self.fc1 = nn.Linear(self.state_dims, self.fc1_dims)
-        self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)
-        self.fc3 = nn.Linear(self.fc2_dims, self.fc3_dims)
-        self.action_out = nn.Linear(self.fc3_dims, self.n_actions)
+        self.fc1 = nn.Linear(state_dims, fc1_dims)
+        self.fc2 = nn.Linear(fc1_dims, fc2_dims)
+        self.fc3 = nn.Linear(fc2_dims, fc3_dims)
+        self.mu = nn.Linear(fc3_dims, n_actions)
 
         self.optimizer = optim.Adam(self.parameters(), lr=alpha) 
         self.device = T.device('cuda:0' if T.cuda.is_available() else 'cuda:1')
@@ -35,7 +27,7 @@ class ActorNetwork(nn.Module):
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
-        x = T.tanh(self.action_out(x)) * self.max_action
+        x = T.tanh(self.mu(x)) * self.max_action
 
         return x
 
@@ -55,16 +47,11 @@ class CriticNetwork(nn.Module):
         self.name = name
         self.checkpoint_file = os.path.join(chkpt_dir,name+'_ddpg')
         self.max_action = max_action
-        self.state_dims = state_dims
-        self.fc1_dims = fc1_dims
-        self.fc2_dims = fc2_dims
-        self.fc3_dims = fc3_dims
-        self.n_actions = n_actions
 
-        self.fc1 = nn.Linear(self.state_dims + n_actions, self.fc1_dims)
-        self.fc2 = nn.Linear(self.fc1_dims, self.fc2_dims)
-        self.fc3 = nn.Linear(self.fc2_dims, self.fc3_dims)
-        self.q = nn.Linear(self.fc3_dims, 1)
+        self.fc1 = nn.Linear(state_dims + n_actions, fc1_dims)
+        self.fc2 = nn.Linear(fc1_dims, fc2_dims)
+        self.fc3 = nn.Linear(fc2_dims, fc3_dims)
+        self.q = nn.Linear(fc3_dims, 1)
 
         self.optimizer = optim.Adam(self.parameters(), lr=beta) 
         self.device = T.device('cuda:0' if T.cuda.is_available() else 'cuda:1')

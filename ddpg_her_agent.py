@@ -11,12 +11,18 @@ from datetime import datetime
 import numpy as np
 from mpi_utils import sync_networks, sync_grads
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 
 class DDPG_HER_AGENT():
     def __init__(self, env, params):
         self.env = env
         self.args = params
         
+        # Store useful information
+        self.train_actor_loss = []
+        self.train_critic_loss = []
+        self.reward = []
+        self.success_rate = []
         # Create networks
         self.actor = ActorNetwork(alpha = self.args['pi_lr'], 
                                   state_dims = self.args['obs_shape'] + self.args['goal_shape'], 
@@ -65,7 +71,7 @@ class DDPG_HER_AGENT():
         buffer_shapes = dict()
         buffer_shapes['o'] = (self.T + 1, self.args['obs_shape'])
         buffer_shapes['g'] = (self.T, self.args['goal_shape'])
-        buffer_shapes['g'] = (buffer_shapes['g'][0], self.args['goal_shape'])
+        # buffer_shapes['g'] = (buffer_shapes['g'][0], self.args['goal_shape'])
         buffer_shapes['u'] = (self.T, self.args['action_shape'])
         buffer_shapes['ag'] = (self.T + 1, self.args['goal_shape'])
 
@@ -119,13 +125,15 @@ class DDPG_HER_AGENT():
     def _evaluate(self):
         success_rate = []
         for rollout in range(self.args["n_test_rollouts"]):
-            success = self.worker.generate_rollout(self.actor)[-1][-1]
+            success = self.worker.generate_rollout(self.target_actor, test=True)[-1]
             success_rate.append(success)
-        success_rate = np.mean(np.array(success_rate))
+
+        success_rate = np.mean(np.array(success_rate)[:,-1])
         global_success_rate = MPI.COMM_WORLD.allreduce(success_rate, op=MPI.SUM)
         return global_success_rate / MPI.COMM_WORLD.Get_size()    
             
     def _train(self):
+
         # 1. Get batch sample from buffer
         transitions = self.buffer.sample(batch_size=self.args['batch_size'])
 
@@ -157,11 +165,11 @@ class DDPG_HER_AGENT():
             q_next_state = self.target_critic(input_new, next_action_by_target_actor).detach()
 
         # y_i
-        target_q = (rewards + self.args['gamma'] * q_next_state).detach()
+            target_q = (rewards + self.args['gamma'] * q_next_state).detach()
 
-        # Clip the q_value used to train the critic to the range [- 1/(1 - γ), 0] as specified in paper
-        clip_range = - 1 / (1 - self.args['gamma'])
-        target_q = torch.clamp(target_q, clip_range, 0)
+            # Clip the q_value used to train the critic to the range [- 1/(1 - γ), 0] as specified in paper
+            clip_range = - 1 / (1 - self.args['gamma'])
+            target_q = torch.clamp(target_q, clip_range, 0)
 
 
         # 3. Update critic by minimizing L = mean((y_i - Q(s_i, q_i | 0^{Q}))^2)
@@ -169,6 +177,7 @@ class DDPG_HER_AGENT():
         # Q(s_i, q_i | 0^{Q})
         critic_value = self.critic(input, actions)
         L = F.mse_loss(target_q, critic_value)
+        c_l = L.cpu().detach().numpy().squeeze()
 
         self.critic.optimizer.zero_grad()
         L.backward()
@@ -183,13 +192,15 @@ class DDPG_HER_AGENT():
         actor_loss = -self.critic(input, mu).mean()
         # Add quadratic penalty on actions to mantain smoothnes, as in baselines implementation.
         actor_loss += self.args['action_l2'] * (mu / self.args['max_action']).pow(2).mean()
-
+        a_l = actor_loss.cpu().detach().numpy().squeeze().copy()
+        
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
         sync_grads(self.actor)
         self.actor.optimizer.step()
 
-        
+        return a_l, c_l
+
     def learn(self):
         
         for epoch in range(self.args['n_epochs']):
@@ -216,10 +227,17 @@ class DDPG_HER_AGENT():
                 # Update normalizer
                 self._update_normalizer(episode_batch=episode_dict)
                 
-                for batch in range(self.args['n_batches']):
+                actor_losses = []
+                critic_losses = []
+                for n in range(self.args['n_batches']):
                     # Train networks
-                    self._train()
-                
+                    a_l, c_l = self._train()
+                    actor_losses.append(a_l)
+                    critic_losses.append(c_l)
+                    
+                self.train_actor_loss.append(np.mean(actor_losses))
+                self.train_critic_loss.append(np.mean(critic_losses))
+
                 # Soft update
                 self._soft_update(self.target_actor, self.actor)
                 self._soft_update(self.target_critic, self.critic)
@@ -227,7 +245,32 @@ class DDPG_HER_AGENT():
             # Start epoch evaluation & save model
             success_rate = self._evaluate()
             if MPI.COMM_WORLD.Get_rank() == 0:
+                self.success_rate.append(success_rate)
                 print('[{}] epoch is: {}, eval success rate is: {:.3f}'.format(datetime.now(), epoch, success_rate))
                 torch.save([self.o_norm.mean, self.o_norm.std, self.g_norm.mean, self.g_norm.std, self.actor.state_dict()], \
                             self.model_path + '/model.pt')
 
+        if MPI.COMM_WORLD.Get_rank() == 0:
+            # Plot success_rate
+            plt.plot(self.success_rate)
+            plt.title('Success Rate Over Time')
+            plt.xlabel('Epoch')
+            plt.ylabel('Success Rate')
+            plt.savefig('success_rate.png')
+            plt.clf()
+
+            # Plot train_actor_loss
+            plt.plot(self.train_actor_loss)
+            plt.title('Actor Loss Over Time')
+            plt.xlabel('Cycle')
+            plt.ylabel('Actor Loss')
+            plt.savefig('actor_loss.png')
+            plt.clf()
+
+            # Plot train_critic_loss
+            plt.plot(self.train_critic_loss)
+            plt.title('Critic Loss Over Time')
+            plt.xlabel('Cycle')
+            plt.ylabel('Critic Loss')
+            plt.savefig('critic_loss.png')
+            plt.clf()

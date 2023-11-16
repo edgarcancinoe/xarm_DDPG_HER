@@ -4,8 +4,8 @@ HER_PARAMS = {
     'layers': 3,  # number of layers in the critic/actor networks
     'hidden': 256,  # number of neurons in each hidden layers
     'network_class': 'baselines.her.actor_critic:ActorCritic',
-    'Q_lr': 0.001,  # critic learning rate
-    'pi_lr': 0.001,  # actor learning rate
+    'Q_lr': 0.01,  # critic learning rate
+    'pi_lr': 0.01,  # actor learning rate
     'buffer_size': int(1E6),  # for experience replay
     'polyak': 0.95,  # polyak averaging coefficient
     'action_l2': 1.0,  # quadratic penalty on actions (before rescaling by max_u)
@@ -14,10 +14,10 @@ HER_PARAMS = {
     'relative_goals': False,
     'gamma': 0.98,
     # training
-    'n_epochs': 50,
-    'n_cycles': 50,  # per epoch
-    'rollout_batch_size': 2,  # per mpi thread
-    'n_batches': 40,  # training batches per cycle
+    'n_epochs': 25,
+    'n_cycles': 80,  # per epoch
+    'rollout_batch_size': 1,  # per mpi thread
+    'n_batches': 32,  # training batches per cycle
     'batch_size': 256,  # per mpi thread, measured in transitions and reduced to even multiple of chunk_length.
     'n_test_rollouts': 10,  # number of test rollouts per epoch, each consists of rollout_batch_size rollouts
     'test_with_polyak': False,  # run test episodes with the target network

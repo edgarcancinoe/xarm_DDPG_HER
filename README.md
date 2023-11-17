@@ -3,9 +3,9 @@ Implementation of Deep Deterministic Policy Gradient (DDPG) algorithm using Hind
 
 This repository contains the training code, parameter configuration, and a working model to compute inverse kinematics for a xArm6 robot to reach a target destination in cartesian coordinates.
 
-The simulation is carried out using ```mujoco200``` and the environment ```gym-xarm6``` was provided by julio-design in the following repository: [xArm6-Gym-Env](https://github.com/julio-design/xArm6-Gym-Env). The original repository also contains a similar learning implementation, but the one here has been simplified, modularized and detailed.
+The simulation is carried out using ```mujoco200``` and the environment ```gym-xarm6``` was provided by _julio-design_ in the following repository: [xArm6-Gym-Env](https://github.com/julio-design/xArm6-Gym-Env). The original repository also contains a similar learning implementation, but the one here has been simplified, modularized and detailed.
 
-The code consists of a detailed implementation of DDPG & HER with the _future_ sampling strategy, based on each algorithm's respective paper<sup>1, 2</sup>, and OpenAI [https://github.com/openai/baselines/tree/master/baselines/her](baseline's implementation of HER).
+The code consists of a detailed implementation of DDPG & HER with the _future_ sampling strategy, based on each algorithm's respective paper<sup>1, 2</sup>, and OpenAI [baseline's implementation of HER](https://github.com/openai/baselines/tree/master/baselines/her).
 
 ## Results
 

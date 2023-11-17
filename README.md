@@ -22,12 +22,15 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 * torch===2.0.0
 
 1. Clone this repository
-   '''
+   ```
    git clone https://github.com/edgarcancinoe/xarm6_DDPG_HER.git
-   '''
+   ```
+   
 3. Download MuJoCo [https://github.com/openai/mujoco-py#install-mujoco](here).
-4. Create ```.mujoco``` folder in home directory and unzip download file there.
-5. Modify ```.bashrc``` and add:
+   
+5. Create ```.mujoco``` folder in home directory and unzip download file there.
+   
+7. Modify ```.bashrc``` and add:
    ```
    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/home/dir/.mujoco/mujoco200/bin
    ```

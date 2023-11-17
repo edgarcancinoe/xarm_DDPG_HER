@@ -26,7 +26,7 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
    git clone https://github.com/edgarcancinoe/xarm6_DDPG_HER.git
    ```
    
-3. Download MuJoCo [https://github.com/openai/mujoco-py#install-mujoco](here).
+3. Download MuJoCo [here](https://github.com/openai/mujoco-py#install-mujoco).
    
 5. Create ```.mujoco``` folder in home directory and unzip download file there.
    

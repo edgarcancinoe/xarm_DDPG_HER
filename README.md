@@ -12,7 +12,7 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 ## Installation
 
 ## Use
-1. Navigate to repository folder
+1. Navigate to repository folder and activate Python environment.
 2. To start training of the model:
    ```
    python3 main.py -t

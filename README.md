@@ -21,6 +21,7 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 * openai baselines
 * torch===2.0.0
 
+##### Install
 1. Clone this repository
    ```
    git clone https://github.com/edgarcancinoe/xarm6_DDPG_HER.git

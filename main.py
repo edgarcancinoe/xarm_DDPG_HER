@@ -1,6 +1,16 @@
-# Import libraries
-#  python3 main.py -s /home/edgarcancinoe/gym-rl/xArm6-home/models/xArm6Reach-v1/modelo.pt
+""" 
+    DDPG + HER based on Baselines Implementation
 
+    Jose Edgar Hernandez Cancino Estrada
+    B.S. in Robotics and Digital Systems Engineering (June, 2024)
+    Tecnologico de Monterrey
+
+    Utilization of xArm6 gym environment by Julio-Design:
+    https://github.com/julio-design/xArm6-Gym-Env
+
+"""
+
+# Import libraries
 import gym
 import numpy as np
 import torch

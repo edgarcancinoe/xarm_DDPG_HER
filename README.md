@@ -60,4 +60,4 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 3. **xArm6 Gym environment**: https://github.com/julio-design/xArm6-Gym-Env
 4. **Baseline's HER implementation**: https://github.com/openai/baselines/tree/master/baselines/her
 ---
-The output of this code, i.e. the actor policy to reach the target positions has been translated into in ROS for a real xArm6 in [https://github.com/edgarcancinoe/xArm6_DDPG_ROS/blob/master/README.md](this) repo.
+The output of this code, i.e. the actor policy to reach the target positions has been translated into in ROS for a real xArm6 in [https://github.com/edgarcancinoe/xArm6_DDPG_ROS/blob/master/README.md](this) repository.

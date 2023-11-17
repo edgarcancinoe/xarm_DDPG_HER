@@ -60,13 +60,11 @@ if __name__ == '__main__':
     kwargs.update(env_params)
 
     # Set random seeds for reproductibility
-    # env.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
-    # random.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
-    # np.random.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
-    # torch.manual_seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
-    # if kwargs.cuda:
-    #     torch.cuda.manual_seed(kwargs.seed + MPI.COMM_WORLD.Get_rank())
-        
+    env.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
+    random.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
+    np.random.seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
+    torch.manual_seed(kwargs['seed'] + MPI.COMM_WORLD.Get_rank())
+            
     if args.test:
         if os.path.isfile(args.test):
             o_mean, o_std, g_mean, g_std, model = torch.load(args.test, map_location=lambda storage, loc: storage)
@@ -83,7 +81,7 @@ if __name__ == '__main__':
             actor_network.load_state_dict(model)
             actor_network.eval() 
 
-            for i in range(10):
+            for i in range(15):
                 observation = env.reset()
                 # start to do the demo
 

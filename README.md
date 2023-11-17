@@ -14,10 +14,10 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 ## Use
 1. Navigate to repository folder
 2. To start training of the model:
-```
-python3 main.py -t
-```
-A number of epochs will run (default is 24 but only about 7 are necessary). After each epoch the policy is evaluated and the model is saved in the path specified by the 'save_dir' parameter found in _main.py_ as _env_name/model.pt_.
+   ```
+   python3 main.py -t
+   ```
+   A number of epochs will run (default is 24 but only about 7 are necessary). After each epoch the policy is evaluated and the model is saved in the path specified by the 'save_dir' parameter found in _main.py_ as _env_name/model.pt_.
 
 3. To load the saved models and see the agent act in the environment based on the current policy, run:
    ```

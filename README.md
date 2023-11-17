@@ -11,16 +11,34 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 
 ## Installation
 
-### Requirements
+## Use
+1. Navigate to repository folder
+2. To start training of the model:
+```
+python3 main.py -t
+```
+A number of epochs will run (default is 24 but only about 7 are necessary). After each epoch the policy is evaluated and the model is saved in the path specified by the 'save_dir' parameter found in _main.py_ as _env_name/model.pt_.
+
+3. To load the saved models and see the agent act in the environment based on the current policy, run:
+   ```
+   python3 main.py -s <path_to_your_model>
+   ```
+
+   Which might be:
+   ```
+   python3 main.py -s /home/edgarcancinoe/gym-rl/xArm6-home/models/xArm6Reach-v1/modelo.pt
+   ```
+   
+##### Requirements
 * Python 3.6+
-* mpi4py===3.1.4
 * gym===0.15.7
-* openai baselines
-* torch===2.0.0
+* mpi4py===3.1.4
 * mujoco===2.0.0
 * mujoco-py===2.1.2.14
 * numpy===1.26.1
-
+* openai baselines
+* torch===2.0.0
+  
 ## Reference
 1. **DDPG Paper**: <a>https://arxiv.org/abs/1509.02971</a>
 2. **Hindsight Experience Replay**: https://arxiv.org/abs/1707.01495

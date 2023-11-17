@@ -12,7 +12,14 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 ## Installation
 
 ### Requirements
-
+* Python 3.6+
+* mpi4py===3.1.4
+* gym===0.15.7
+* openai baselines
+* torch===2.0.0
+* mujoco===2.0.0
+* mujoco-py===2.1.2.14
+* numpy===1.26.1
 
 ## Reference
 1. **DDPG Paper**: <a>https://arxiv.org/abs/1509.02971</a>

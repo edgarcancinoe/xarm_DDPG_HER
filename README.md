@@ -8,6 +8,7 @@ The simulation is carried out using ```mujoco210``` and the environment is a cus
 The implementation of DDPG & HER with the _future_ sampling strategy is based on each algorithm's respective paper<sup>1, 2</sup>, and [OpenAI baseline's implementation of HER](https://github.com/openai/baselines/tree/master/baselines/her).
 
 ## Results
+<img src="https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/success_rate.png"\>
 
 ## Installation
  

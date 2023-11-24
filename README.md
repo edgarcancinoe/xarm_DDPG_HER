@@ -9,9 +9,11 @@ The implementation of DDPG & HER with the _future_ sampling strategy is based on
 
 ## Results
 
-<img src="https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/success_rate.png"/>
+Cartesian path following position waypoints             |  Consecutively setting joint pose
+:-------------------------:|:-------------------------:
 
-<img src="https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/actor_loss.png"/>
+<img src="https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/success_rate.png"/> |   <img src="https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/actor_loss.png"/>
+
 
 ## Installation
  

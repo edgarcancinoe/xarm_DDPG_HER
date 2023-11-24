@@ -59,7 +59,7 @@ Tecnologico de Monterrey -->
                                         <include file="gripper.xml" quat="0 0 0 1"></include>
                                         <site name="robot0:grip" pos="0 0 0" rgba="0 1 0 .7" size="0.01 0.01 0.01" type="box"></site>
                                         <body name="robot0:cam1" pos="0.065 0 -0.1075" quat="0.9238 0 -0.38268 0">
-                                            <joint name="robot0:camjoint" axis="0 1 0" range="-15 15"></joint>
+                                            <!-- <joint name="robot0:camjoint" axis="0 1 0" range="-15 15"></joint> -->
                                             <geom material="orangel" name="robot0:cam1" mesh="robot0:cam1"/>
                                         </body>
                                     </body>

@@ -1,19 +1,19 @@
 HER_PARAMS = {
     # ddpg
-    'Q_lr': 0.01,  # critic learning rate
-    'pi_lr': 0.01,  # actor learning rate
+    'Q_lr': 0.005,  # critic learning rate
+    'pi_lr': 0.005,  # actor learning rate
     'buffer_size': int(1E6),  # for experience replay
     'polyak': 0.95,  # polyak averaging coefficient
-    'action_l2': 1.0,  # quadratic penalty on actions (before rescaling by max_u)
+    'action_l2': 1.5,  # quadratic penalty on actions (before rescaling by max_u)
     'clip_obs': 200.,
     'gamma': 0.98,
     # training
     'n_epochs': 24,
     'n_cycles': 80,  # per epoch
     'rollout_batch_size': 1,  # per mpi thread
-    'n_batches': 32,  # training batches per cycle
+    'n_batches': 96,  # training batches per cycle
     'batch_size': 256,  # per mpi thread, measured in transitions and reduced to even multiple of chunk_length.
-    'n_test_rollouts': 10,  # number of test rollouts per epoch, each consists of rollout_batch_size rollouts
+    'n_test_rollouts': 20,  # number of test rollouts per epoch, each consists of rollout_batch_size rollouts
     # exploration
     'random_eps': 0.3,  # percentage of time a random action is taken
     'noise_eps': 0.2,  # std of gaussian noise added to not-completely-random actions as a percentage of max_u

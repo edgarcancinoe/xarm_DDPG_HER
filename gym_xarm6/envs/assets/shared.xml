@@ -36,6 +36,7 @@
         <mesh file="J5.stl" name="robot0:wrist_flex_link"></mesh>
         <mesh file="J6.stl" name="robot0:wrist_roll_link"></mesh>
         <mesh file="Tool.stl" name="robot0:tool_link"></mesh>
+        
         <mesh file="gripper/meshes/base_link.STL" name="robot0:gripper_base_link"/>
         <mesh file="gripper/meshes/left_finger.STL" name="robot0:left_finger"/>
         <mesh file="gripper/meshes/left_inner_knuckle.STL" name="robot0:left_inner_knuckle"/>
@@ -43,6 +44,15 @@
         <mesh file="gripper/meshes/right_finger.STL" name="robot0:right_finger"/>
         <mesh file="gripper/meshes/right_inner_knuckle.STL" name="robot0:right_inner_knuckle"/>
         <mesh file="gripper/meshes/right_outer_knuckle.STL" name="robot0:right_outer_knuckle"/>
+
+
+        <mesh file="GripperSF/Base_Gripper.stl" name="robot0:gripperSF_base_link"/>
+        <mesh file="GripperSF/left_finger.stl" name="robot0:SFleft_finger"/>
+        <mesh file="GripperSF/right_finger.stl" name="robot0:SFright_finger"/>
+
+        <mesh file="Dashgo/dashgo_cubierta.stl" name="robot0:body"/>
+        <mesh file="Dashgo/Cam1.stl" name="robot0:cam1"/>
+
     </asset>
 
     <equality>

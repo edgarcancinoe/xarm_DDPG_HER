@@ -8,6 +8,8 @@ def goal_distance(goal_a, goal_b):
     return np.linalg.norm(goal_a - goal_b, axis=-1)
 
 var = math.sqrt(2)/2
+eef_qpos = [var, 0, var, 0]
+eef_qpos = [0.5, 0.5, -0.5, 0.5]
 
 class xArm6Env(robot_env.RobotEnv):
     """Superclass for all xArm6 environments.
@@ -49,7 +51,7 @@ class xArm6Env(robot_env.RobotEnv):
                 initial_qpos=initial_qpos)
 
         # GoalEnv methods
-    # ----------------------------
+    # --------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
@@ -60,7 +62,7 @@ class xArm6Env(robot_env.RobotEnv):
             return -d
 
     # RobotEnv methods
-    # ----------------------------
+    # --------------------------
 
     def _step_callback(self):
         if self.block_gripper:
@@ -73,9 +75,8 @@ class xArm6Env(robot_env.RobotEnv):
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
         pos_ctrl *= 0.02  # limit maximum change in position
-        rot_ctrl = [-var, 0, -var, 0]  # fixed rotation of the end effector, expressed as a quaternion
+        rot_ctrl = eef_qpos  # fixed rotation of the end effector, expressed as a quaternion
 
-        # rot_ctrl = action[3:]
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper: 
@@ -92,7 +93,7 @@ class xArm6Env(robot_env.RobotEnv):
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
-        # print(robot_qpos[3:-2])
+
         if self.has_object:
             object_pos = self.sim.data.get_site_xpos('object0')
             # rotations
@@ -113,21 +114,16 @@ class xArm6Env(robot_env.RobotEnv):
         else:
             achieved_goal = np.squeeze(object_pos.copy())
 
-        # print(grip_pos) # Gripper posicion
-        # print(gripper_state) # Posicion Q dedos (o sea que tanto estan cerrados) parece ser 0 siempre
-        # print(grip_velp) # Velocidad gripper
-        # print(gripper_vel) # Velocidad dedos? Parece que si, y que suelen ser 0 siempre
-        # print()
         obs = np.concatenate([
             grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
             object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
             ])
-        # print(self.goal)
+
         return {
                 'observation': obs.copy(),
                 'achieved_goal': achieved_goal.copy(),
                 'desired_goal': self.goal.copy(),
-                }
+            }
 
     def _viewer_setup(self):
         body_id = self.sim.model.body_name2id('robot0:tool_link')
@@ -173,11 +169,16 @@ class xArm6Env(robot_env.RobotEnv):
             if self.target_in_the_air and self.np_random.uniform() < 0.5:
                 goal[2] += self.np_random.uniform(0, 0.45)
         else:
-            goal = np.array([
-                np.random.uniform(0.5, .62, size=1)[0],
-                np.random.uniform(-.3, .3, size=1)[0],
-                np.random.uniform(.15, .45, size=1)[0]])
+            # goal = np.array([
+            #     np.random.uniform(0.5, .62, size=1)[0],
+            #     np.random.uniform(-.3, .3, size=1)[0],
+            #     np.random.uniform(.15, .45, size=1)[0]])
 
+            goal = np.array([
+                np.random.uniform(-.3, .3, size=1)[0],
+                np.random.uniform(-0.42, -.62, size=1)[0],
+                np.random.uniform(.15, .45, size=1)[0]])
+            
             return goal.copy()
 
 
@@ -193,9 +194,8 @@ class xArm6Env(robot_env.RobotEnv):
 
         # Move end effector into position.
         gripper_target = self.sim.data.get_site_xpos('robot0:grip')
-        gripper_rotation = np.array([var, 0., var, 0.])
+        gripper_rotation = np.array(eef_qpos)
 
-        #gripper_rotation = dhm.get_pos_orn()[3:]
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
         for _ in range(50):

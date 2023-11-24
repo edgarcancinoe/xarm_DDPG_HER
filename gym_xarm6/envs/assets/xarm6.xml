@@ -10,7 +10,8 @@
         <joint armature="0.0001" axis="0 1 0" damping="1e+11" name="robot0:slide1" pos="0 0 0" type="slide" limited="false"></joint>
         <joint armature="0.0001" axis="0 0 1" damping="1e+11" name="robot0:slide2" pos="0 0 0" type="slide" limited="false"></joint>
         <inertial diaginertia="0 0 0" mass="12.2" pos="0 0 0"></inertial>
-        <geom name="robot0:base_link" pos="0 0 -0.0925" size="0.11 0.11 0.0925" type="box" material="grayd"></geom>
+        <!-- <geom name="robot0:base_link" pos="0 0 -0.0925" size="0.11 0.11 0.0925" type="box" material="grayd"></geom> -->
+        <geom name="robot0:base_link" type="mesh" mesh="robot0:body" pos="0 0 -.465" material="whitel"></geom>
 
         <body name="robot0:shoulder_pan_link" pos="0 0 0" euler="0 0 0">
             <geom name="robot0:shoulder_pan_link" type="mesh" mesh="robot0:shoulder_pan_link" pos="0 0 0" material="bluel" euler="0 0 180"></geom>
@@ -49,6 +50,10 @@
                                         <!-- comment this line to not include the gripper -->
                                         <include file="gripper.xml" quat="0 0 0 1"></include>
                                         <site name="robot0:grip" pos="0 0 0" rgba="0 1 0 .7" size="0.01 0.01 0.01" type="box"></site>
+                                        <body name="robot0:cam1" pos="0.065 0 -0.1075" quat="0.9238 0 -0.38268 0">
+                                            <joint name="robot0:camjoint" axis="0 1 0" range="-15 15"></joint>
+                                            <geom material="orangel" name="robot0:cam1" mesh="robot0:cam1"/>
+                                        </body>
                                     </body>
                                 </body>
                             </body>

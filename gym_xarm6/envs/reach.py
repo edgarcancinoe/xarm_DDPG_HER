@@ -15,11 +15,11 @@ class xArm6ReachEnv(xarm6_env.xArm6Env, utils.EzPickle):
             'robot0:shoulder_pan_joint': 0.,
             'robot0:shoulder_lift_joint': 0.,
             'robot0:elbow_flex_joint': 0.,
-            'robot0:forearm_roll_joint': 0.,
-            'robot0:wrist_flex_joint': -1.5707329355919546,
+            'robot0:forearm_roll_joint': -1.5707329355919546,
+            'robot0:wrist_flex_joint': 1.5707329355919546,
             'robot0:wrist_roll_joint': 0.,
-            'robot0:left_finger_joint': 0.0,
-            'robot0:right_finger_joint': 0.0
+            # 'robot0:left_finger_joint': 0.0,
+            # 'robot0:right_finger_joint': 0.0
         }
         xarm6_env.xArm6Env.__init__(
             self, MODEL_XML_PATH, has_object=False, block_gripper=False, n_substeps=30,

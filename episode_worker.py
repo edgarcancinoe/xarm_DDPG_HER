@@ -67,7 +67,7 @@ class EpisodeWorker:
             r_achieved_goals.append(ag.copy())
             r_goals.append(goal.copy())
             r_successes.append(info['is_success'].copy())
-
+            # self.env.render()
             if (done):
                 break
 

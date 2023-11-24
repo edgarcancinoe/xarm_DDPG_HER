@@ -15,6 +15,8 @@ import gym
 import numpy as np
 import torch
 import sys
+import os
+import time
 
 from mpi4py import MPI
 
@@ -22,7 +24,6 @@ from baselines_code.util import *
 from ddpg_her_agent import DDPG_HER_AGENT
 
 import gym_xarm6
-import os
 
 from networks import ActorNetwork
 import random
@@ -60,7 +61,7 @@ if __name__ == '__main__':
         'min_action': -env.action_space.high[0],
         'max_timesteps': env._max_episode_steps,
         'env_type': "Mujoco",
-        'seed': 323,
+        'seed': 123,
         'n_actions': 4,
         'clip_range': 5.0,
         'save_dir': "models",
@@ -91,8 +92,8 @@ if __name__ == '__main__':
             actor_network.load_state_dict(model)
             actor_network.eval() 
 
-            for i in range(15):
-                observation = env.reset()
+            for i in range(25):
+                observation = env.reset_goal()
                 # start to do the demo
 
                 obs = observation['observation']
@@ -116,6 +117,10 @@ if __name__ == '__main__':
                 
                     if info['is_success']:
                         env.render()
+                        for i in range(1000):
+                            continue
+                        # import time
+                        # time.sleep(1)
                         break
                 print('the episode is: {}, is success: {}'.format(i, info['is_success']))
                 
@@ -128,3 +133,7 @@ if __name__ == '__main__':
     
         model = DDPG_HER_AGENT(env=env, params=kwargs)
         model.learn()
+    
+    else:
+        env.render()
+        time.sleep(5)

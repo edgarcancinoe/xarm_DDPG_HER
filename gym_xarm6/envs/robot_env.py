@@ -2,6 +2,11 @@
 Author: OpenAI
 Modified by: Julio Cesar RAMIREZ
 Institution: ESTIA
+
+Modified in November 2023 by J.Edgar Hernandez Cancino EStrada
+B.S. in Robotics and Digital Systems Engineering (June, 2024)
+Tecnologico de Monterrey
+
 """
 import os
 import copy

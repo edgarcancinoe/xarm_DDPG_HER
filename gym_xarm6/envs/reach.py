@@ -2,7 +2,6 @@ import os
 from gym import utils
 from gym_xarm6.envs import xarm6_env
 
-
 # Ensure we get the path separator correct on windows
 MODEL_XML_PATH = os.path.join('assets', 'reach.xml')
 

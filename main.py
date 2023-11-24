@@ -5,7 +5,7 @@
     B.S. in Robotics and Digital Systems Engineering (June, 2024)
     Tecnologico de Monterrey
 
-    Utilization of xArm6 gym environment by Julio-Design:
+    Utilization of xArm6Reach-v1 gym environment by Julio-Design:
     https://github.com/julio-design/xArm6-Gym-Env
 
 """

@@ -13,7 +13,9 @@ Training success rate            |  Actor Loss over training
 :-------------------------:|:-------------------------:
 ![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/success_rate.png) |  ![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/actor_loss.png)
 
-
+Test visualization
+:-------------------------:
+![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/results.gif) 
 
 ## Installation
  

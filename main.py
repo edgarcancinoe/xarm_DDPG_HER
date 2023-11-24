@@ -92,7 +92,7 @@ if __name__ == '__main__':
             actor_network.load_state_dict(model)
             actor_network.eval() 
 
-            for i in range(25):
+            for i in range(40):
                 observation = env.reset_goal()
                 # start to do the demo
 

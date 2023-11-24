@@ -12,6 +12,8 @@ The implementation of DDPG & HER with the _future_ sampling strategy is based on
 Training success rate            |  Actor Loss over training
 :-------------------------:|:-------------------------:
 ![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/success_rate.png) |  ![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/actor_loss.png)
+
+Results
 :-------------------------:
 ![](https://github.com/edgarcancinoe/home_DDPG_HER/blob/master/results.gif) 
 

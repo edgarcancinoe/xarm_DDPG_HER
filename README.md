@@ -10,7 +10,32 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 ## Results
 
 ## Installation
+ 
+##### Requirements
+* Python 3.6+
+* gym===0.15.7
+* mpi4py===3.1.4
+* mujoco2.1.0
+* mujoco-py===2.1.2.14
+* numpy===1.26.1
+* openai baselines
+* torch===2.0.0
 
+##### Install
+1. Clone this repository
+   ```
+   git clone https://github.com/edgarcancinoe/xarm6_DDPG_HER.git
+   ```
+   
+3. Download MuJoCo [here](https://github.com/openai/mujoco-py#install-mujoco).
+   
+5. Create ```.mujoco``` folder in home directory and unzip download file there.
+   
+7. Modify ```.bashrc``` and add:
+   ```
+   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/home/dir/.mujoco/mujoco200/bin
+   ```
+   
 ## Use
 1. Navigate to repository folder and activate Python environment.
 2. To start training of the model:
@@ -28,16 +53,6 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
    ```
    python3 main.py -s /home/edgarcancinoe/gym-rl/xArm6-home/models/xArm6Reach-v1/modelo.pt
    ```
-   
-##### Requirements
-* Python 3.6+
-* gym===0.15.7
-* mpi4py===3.1.4
-* mujoco===2.0.0
-* mujoco-py===2.1.2.14
-* numpy===1.26.1
-* openai baselines
-* torch===2.0.0
   
 ## Reference
 1. **DDPG Paper**: <a>https://arxiv.org/abs/1509.02971</a>
@@ -45,4 +60,4 @@ The code consists of a detailed implementation of DDPG & HER with the _future_ s
 3. **xArm6 Gym environment**: https://github.com/julio-design/xArm6-Gym-Env
 4. **Baseline's HER implementation**: https://github.com/openai/baselines/tree/master/baselines/her
 ---
-The output of this code, i.e. the actor policy to reach the target positions has been translated into in ROS for a real xArm6 in [https://github.com/edgarcancinoe/xArm6_DDPG_ROS/blob/master/README.md](this) repo.
+The output of this code, i.e. the actor policy to reach the target positions has been translated into in ROS for a real xArm6 in [https://github.com/edgarcancinoe/xArm6_DDPG_ROS/blob/master/README.md](this) repository.

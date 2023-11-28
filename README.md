@@ -41,7 +41,7 @@ Test visualization
    
 7. Modify ```.bashrc``` and add:
    ```
-   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/home/dir/.mujoco/mujoco200/bin
+   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/home/dir/.mujoco/mujoco210/bin
    ```
    
 ## Use

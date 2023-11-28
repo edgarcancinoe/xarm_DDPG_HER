@@ -102,7 +102,7 @@ if __name__ == '__main__':
                 position_trajectory = np.zeros((env._max_episode_steps, 3))
 
                 position_trajectory[0] = obs[:3]
-
+                
                 for t in range(env._max_episode_steps):
                     env.render()
                     inputs = process_inputs(obs, g, o_mean, o_std, g_mean, g_std, kwargs)
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                 
                     if info['is_success']:
                         env.render()
-                        for i in range(1000):
+                        for _ in range(9900):
                             continue
                         # import time
                         # time.sleep(1)

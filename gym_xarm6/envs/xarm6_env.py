@@ -17,9 +17,9 @@ def goal_distance(goal_a, goal_b):
     assert goal_a.shape == goal_b.shape
     return np.linalg.norm(goal_a - goal_b, axis=-1)
 
-var = math.sqrt(2)/2
+var = -math.sqrt(2)/2
 eef_qpos = [var, 0, var, 0]
-eef_qpos = [0.5, 0.5, -0.5, 0.5]
+# eef_qpos = [0.5, 0.5, -0.5, 0.5]
 
 class xArm6Env(robot_env.RobotEnv):
     """Superclass for all xArm6 environments.
@@ -179,15 +179,15 @@ class xArm6Env(robot_env.RobotEnv):
             if self.target_in_the_air and self.np_random.uniform() < 0.5:
                 goal[2] += self.np_random.uniform(0, 0.45)
         else:
-            # goal = np.array([
-            #     np.random.uniform(0.5, .62, size=1)[0],
-            #     np.random.uniform(-.3, .3, size=1)[0],
-            #     np.random.uniform(.15, .45, size=1)[0]])
-
             goal = np.array([
+                np.random.uniform(0.5, .62, size=1)[0],
                 np.random.uniform(-.3, .3, size=1)[0],
-                np.random.uniform(-0.42, -.62, size=1)[0],
                 np.random.uniform(.15, .45, size=1)[0]])
+
+            # goal = np.array([
+            #     np.random.uniform(-.3, .3, size=1)[0],
+            #     np.random.uniform(-0.42, -.62, size=1)[0],
+            #     np.random.uniform(.15, .45, size=1)[0]])
             
             return goal.copy()
 

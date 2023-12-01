@@ -30,7 +30,7 @@ Test visualization
 * torch===2.0.0
 
 ##### Install
-1. Clone this repository
+1. Clone this repository:
    ```
    git clone https://github.com/edgarcancinoe/home_DDPG_HER.git
    ```

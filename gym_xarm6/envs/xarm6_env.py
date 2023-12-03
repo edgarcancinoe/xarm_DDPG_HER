@@ -27,7 +27,7 @@ class xArm6Env(robot_env.RobotEnv):
 
     def __init__(
             self, model_path, n_substeps, gripper_extra_height, block_gripper,
-            has_object, target_in_the_air, target_offset, obj_range, target_range,
+            target_in_the_air, target_offset, obj_range, target_range,
             distance_threshold, initial_qpos, reward_type,
             ):
         """Initializes a new xArm6 environment.
@@ -37,7 +37,6 @@ class xArm6Env(robot_env.RobotEnv):
             n_substeps (int): number of substeps the simulation runs on every call to step
             gripper_extra_height (float): additional height above the table when positioning the gripper
             block_gripper (boolean): whether or not the gripper is blocked (i.e. not movable) or not
-            has_object (boolean): whether or not the environment has an object
             target_in_the_air (boolean): whether or not the target should be in the air above the table or on the table surface
             target_offset (float or array with 3 elements): offset of the target
             obj_range (float): range of a uniform distribution for sampling initial object positions
@@ -48,7 +47,6 @@ class xArm6Env(robot_env.RobotEnv):
         """
         self.gripper_extra_height = gripper_extra_height
         self.block_gripper = block_gripper
-        self.has_object = has_object
         self.target_in_the_air = target_in_the_air
         self.target_offset = target_offset
         self.obj_range = obj_range
@@ -104,15 +102,14 @@ class xArm6Env(robot_env.RobotEnv):
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
         
-        object_pos = object_rot = object_velp = object_velr = object_rel_pos = np.zeros(0)
-        gripper_state = robot_qpos[-2:]
-        gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
+        # object_pos = np.zeros(0)
+        # gripper_state = robot_qpos[-2:]
+        # gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
-        achieved_goal = np.squeeze(object_pos.copy())
+        achieved_goal = grip_pos.copy()
 
         obs = np.concatenate([
-            grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
-            object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
+            grip_pos, grip_velp
             ])
 
         return {
@@ -140,16 +137,6 @@ class xArm6Env(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
-        # Randomize start position of object.
-        if self.has_object:
-            object_xpos = self.initial_gripper_xpos[:2]
-            while np.linalg.norm(object_xpos - self.initial_gripper_xpos[:2]) < 0.1:
-                object_xpos = self.initial_gripper_xpos[:2] + self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
-            object_qpos = self.sim.data.get_joint_qpos('object0:joint')
-            assert object_qpos.shape == (7,)
-            object_qpos[:2] = object_xpos
-            self.sim.data.set_joint_qpos('object0:joint', object_qpos)
-
         self.sim.forward()
         return True
 
@@ -158,24 +145,18 @@ class xArm6Env(robot_env.RobotEnv):
 
 
     def _sample_goal(self):
-        if self.has_object:
-            goal = self.initial_gripper_xpos[:3] + self.np_random.uniform(-self.target_range, self.target_range, size=3)
-            goal += self.target_offset
-            goal[2] = self.height_offset
-            if self.target_in_the_air and self.np_random.uniform() < 0.5:
-                goal[2] += self.np_random.uniform(0, 0.45)
-        else:
-            goal = np.array([
-                np.random.uniform(0.5, .62, size=1)[0],
-                np.random.uniform(-.3, .3, size=1)[0],
-                np.random.uniform(.15, .45, size=1)[0]])
 
-            # goal = np.array([
-            #     np.random.uniform(-.3, .3, size=1)[0],
-            #     np.random.uniform(-0.42, -.62, size=1)[0],
-            #     np.random.uniform(.15, .45, size=1)[0]])
-            
-            return goal.copy()
+        goal = np.array([
+            np.random.uniform(0.5, .62, size=1)[0],
+            np.random.uniform(-.3, .3, size=1)[0],
+            np.random.uniform(.15, .45, size=1)[0]])
+
+        # goal = np.array([
+        #     np.random.uniform(-.3, .3, size=1)[0],
+        #     np.random.uniform(-0.42, -.62, size=1)[0],
+        #     np.random.uniform(.15, .45, size=1)[0]])
+        
+        return goal.copy()
 
 
     def _is_success(self, achieved_goal, desired_goal):
@@ -199,8 +180,7 @@ class xArm6Env(robot_env.RobotEnv):
 
         # Extract information for sampling goals.
         self.initial_gripper_xpos = self.sim.data.get_site_xpos('robot0:grip').copy()
-        if self.has_object:
-            self.height_offset = self.sim.data.get_site_xpos('object0')[2]
+        
 
     def render(self, mode='human', width=500, height=500):
         return super(xArm6Env, self).render(mode, width, height)

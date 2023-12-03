@@ -117,11 +117,11 @@ if __name__ == '__main__':
                 
                     if info['is_success']:
                         env.render()
-                        for _ in range(9900):
-                            continue
-                        # import time
-                        # time.sleep(1)
                         break
+                    
+                if not info['is_success']:
+                    env.reset()
+
                 print('the episode is: {}, is success: {}'.format(i, info['is_success']))
                 
         else:

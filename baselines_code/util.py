@@ -8,7 +8,7 @@ HER_PARAMS = {
     'clip_obs': 200.,
     'gamma': 0.98,
     # training
-    'n_epochs': 24,
+    'n_epochs': 36,
     'n_cycles': 80,  # per epoch
     'rollout_batch_size': 1,  # per mpi thread
     'n_batches': 96,  # training batches per cycle
